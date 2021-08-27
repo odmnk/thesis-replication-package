@@ -1,0 +1,15 @@
+ExperimentFactory: /home/pi/external_hdd/pi/android-runner/examples/monsoon/config_full_real.json
+Setting up Monsoon 23171 with 3.8V...
+Monsoon is ready.
+You can now turn the phone on.
+Found a Nexus 5X!
+Warning: Command 'adb shell service call trust 7' returned non-zero exit status 1.
+Device seems to be locked. Disabling Passlock is recommended!
+Device: Setting logcat buffer size to 57344K
+Setting up Monsoon 23171 with 3.8V...
+Monsoon is ready.
+You can now turn the phone on.
+Waiting for an Android device...
+Found a Nexus 5X!
+Warning: Command 'adb shell service call trust 7' returned non-zero exit status 1.
+Device seems to be locked. Disabling Passlock is recommended!

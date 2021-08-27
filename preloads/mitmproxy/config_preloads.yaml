@@ -1,0 +1,47 @@
+server_replay: [
+"flows/affirmcom",
+"flows/africafreak",
+"flows/agriwebb",
+"flows/animoto",
+"flows/beegrucom",
+"flows/bensonbingham",
+"flows/berlinomagazine",
+"flows/blistex",
+"flows/cbc",
+"flows/coindeskcom",
+"flows/dji",
+"flows/fastcodesign",
+"flows/fitchratings",
+"flows/grantthornton.se",
+"flows/g-talentnet",
+"flows/homepl",
+"flows/ictmoscow",
+"flows/infobunnycom",
+"flows/ingenieriarealcom",
+"flows/intercomio",
+"flows/jisrnet",
+"flows/ladbiblecom",
+"flows/lisakristine",
+"flows/musicgreatness",
+"flows/nbc",
+"flows/newsbreakcom",
+"flows/noshiftcom",
+"flows/parselycom",
+"flows/schmoozecomcom",
+"flows/scmpcom",
+"flows/screenrant",
+"flows/sedanmedir",
+"flows/sportbiblecom",
+"flows/squareinternet",
+"flows/theodysseyonline",
+"flows/traineracademy",
+"flows/trustpilot",
+"flows/unclesamsmisguidedchildrencom",
+"flows/unilad",
+"flows/veronicatvnl"
+]
+
+server_replay_nopop: true
+server_replay_kill_extra: true
+save_stream_file: "output/flows"
+

@@ -1,0 +1,139 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Preloads Performance
+# Housekeeping
+
+First we set the working directory
+```{r}
+dir = "/home/omar/thesis-replication-package/preloads/data_analysis"
+```
+
+```{r setup, include=FALSE, cache = FALSE}
+require("knitr")
+## setting working directory
+opts_knit$set(root.dir = dir)
+```
+
+```{r}
+setwd(dir)
+```
+
+Next we import the libraries we need.
+```{r}
+library(ggplot2)
+library(e1071)
+library(dplyr)
+library(effsize)
+# Import functins we created outselves.
+source("util.r")
+```
+
+# Getting the data
+We load the data and then reshape it a little bit to make it easier to work with.
+```{r}
+monsoon_raw_data <- read.csv("../raw_data/Aggregated_Results_Monsoon.csv")
+plt_raw_data <- read.csv("../raw_data/http_post_request_payloads.txt")
+
+combined_data = combine_and_reshape_dataframes(monsoon_raw_data, plt_raw_data, "noremovepreload")
+intact = combined_data[1:200,]
+removed = combined_data[201:400,]
+print(combined_data)
+print(intact)
+print(removed)
+```
+
+# Data Exploration
+
+First lets get some summaries of the data..
+```{r}
+print("All")
+summary(combined_data$plt)
+sd(combined_data$plt)
+print("Intact")
+summary(intact$plt)
+sd(intact$plt)
+print("Removed")
+summary(removed$plt)
+sd(removed$plt)
+```
+Then we make a boxplot of the data.
+```{r}
+ggplot(combined_data, aes(x=treatment, y=plt)) + 
+  geom_boxplot()
+
+```
+We can see that the data is very close.
+
+Lets inspect the  outliers..
+```{r}
+outliers <- boxplot.stats(combined_data$plt)$out
+out_ind <- which(combined_data$plt %in% c(outliers))
+outliers <- combined_data[out_ind,]
+print(outliers)
+outliers %>% group_by(subject, treatment) %>% summarise(Count=n())
+```
+We see that most of the outliers are all for the same mobile web apps  so we decide to not remove them. This is also to be expected as each mobile web app differs from the others in terms of size, logic etc.
+
+# Testing for normality
+The paired t-test assumes that the differences between pairs are normally distributed. Lets investigate..
+```{r}
+differences <- NULL
+differences$subject <- intact$subject
+differences$diff <-  removed$plt - intact$plt
+differences <- data.frame(differences$subject, differences$diff)
+differences <- differences %>%
+  rename(
+   subject = "differences.subject",
+    diff = differences.diff
+    )
+print(differences)
+summary(differences$diff)
+stripchart(differences$diff)
+boxplot(differences$diff)
+```
+We see quite a big difference in the PLT.
+Might be interesting to look at the outliers. 
+
+```{r}
+outliers <- boxplot.stats(differences$diff)$out
+out_ind <- which(differences$diff %in% c(outliers))
+differences[out_ind,]
+```
+
+
+Lets check whether the data is normally distributed. The QQ-plot indicates that the data is not normally distributed. To confirm we apply he Shapiro-Wilk test which returns a p-value of  1.555e-07 meaning that the hypothesis that the data comes from a normal distribution is rejected. 
+
+```{r}
+transform_and_test(removed$plt, intact$plt)
+```
+
+Since the differences are not normally distributed we apply several transformations to see if we can approach a normal distribution.
+
+```{r}
+transform_and_test(removed$plt, intact$plt, "log")
+transform_and_test(removed$plt, intact$plt, "sqrt")
+transform_and_test(removed$plt, intact$plt, "recip")
+```
+
+We can see that for all three transformations the data is not normally distributed.
+
+# Hypothesis Testing
+Since the data is not normally distributed we  will use the Wilcoxon signed rank test:
+```{r}
+wilcox.test(removed$plt, intact$plt, paired=TRUE)
+```
+As we can see this tests gives a p-value of 0.1292 which is above our 0.05 treshold and thus we cannot reject the null hypothesis. So we are not able to claim that there is a significant difference in PLT between MWP that use resource preloading or not.
+
+# Effect Size Estimation
+```{r}
+cliffs_delta_plt <- cliff.delta(removed$plt, intact$plt)
+print(cliffs_delta_plt)
+```
+As expected the value of the Cliff's delta measure is negligible.
+
+
+
+
+

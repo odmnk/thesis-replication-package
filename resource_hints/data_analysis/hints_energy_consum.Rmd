@@ -1,0 +1,147 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+# Resource Hints Energy Consumption
+# Housekeeping
+
+First we set the working directory
+```{r}
+dir = "/home/omar/thesis-replication-package/resource_hints/data_analysis"
+```
+
+```{r setup, include=FALSE, cache = FALSE}
+require("knitr")
+## setting working directory
+opts_knit$set(root.dir = dir)
+```
+
+```{r}
+setwd(dir)
+```
+
+Next we import the libraries we need.
+```{r}
+library(ggplot2)
+library(e1071)
+library(dplyr)
+library(effsize)
+# Import functins we created outselves.
+source("util.r")
+```
+
+# Getting the data
+We load the data and then reshape it a little bit to make it easier to work with.
+```{r}
+monsoon_raw_data <- read.csv("../raw_data/Aggregated_Results_Monsoon.csv")
+plt_raw_data <- read.csv("../raw_data/http_post_request_payloads.txt")
+
+combined_data = combine_and_reshape_dataframes(monsoon_raw_data, plt_raw_data, "noremovehints")
+intact = combined_data[1:200,]
+removed = combined_data[201:400,]
+print(combined_data)
+print(intact)
+print(removed)
+```
+
+# Data Exploration
+
+First lets get some summaries of the data..
+```{r}
+print("All")
+summary(combined_data$energy_joules)
+sd(combined_data$energy_joules)
+print("Intact")
+summary(intact$energy_joules)
+sd(intact$energy_joules)
+print("Removed")
+summary(removed$energy_joules)
+sd(removed$energy_joules)
+```
+Then we make a boxplot of the data.
+```{r}
+ggplot(combined_data, aes(x=treatment, y=energy_joules)) + 
+  geom_boxplot() + labs( x = "Treatment", y = "Energy consumption (J)") + scale_x_discrete(labels=c("Intact", "Removed"))
+ggsave("/home/omar/thesis-replication-package/resource_hints/data_analysis/plots/box_plot_resource_hints_energy_consumption.pdf")
+```
+We can see that xx are very close.
+
+
+Lets inspect the 11 outliers..
+```{r}
+outliers <- boxplot.stats(combined_data$energy_joules)$out
+out_ind <- which(combined_data$energy_joules %in% c(outliers))
+outliers <- combined_data[out_ind,]
+print(outliers)
+outliers %>% group_by(subject, treatment) %>% summarise(Count=n())
+```
+We see that most of the outliers are all for the same mobile web apps with the exception of ncaa.com so we decide to not remove them. This is also to be expected as each mobile web app differs from the others in terms of size, logic etc.
+
+# Testing for normality
+The paired t-test assumes that the differences between pairs are normally distributed. Lets investigate..
+```{r}
+differences <- NULL
+differences$subject <- intact$subject
+differences$diff <-  removed$energy_joules - intact$energy_joules
+differences <- data.frame(differences$subject, differences$diff)
+differences <- differences %>%
+  rename(
+   subject = "differences.subject",
+    diff = differences.diff
+    )
+print(differences)
+summary(differences$diff)
+stripchart(differences$diff)
+boxplot(differences$diff)
+```
+We can see that both the median and the mean lie pretty close together. Although we have a slight skew (negatively) to the left (median is larger than mean). The average and mean both circle around 0, so no big differences.
+
+Might be interesting to look at the outliers. As we can see the majority of these outliers are,all from a positive difference between pairs so the energy consumption of MWA was higher when the hints were removed versus when the hints were left intact.
+
+```{r}
+outliers <- boxplot.stats(differences$diff)$out
+out_ind <- which(differences$diff %in% c(outliers))
+differences[out_ind,]
+```
+
+
+Lets check whether the data is normally distributed. The QQ-plot indicates that the data is not normally distributed. To confirm we apply he Shapiro-Wilk test which returns a p-value of 4.185e-09 meaning that the hypothesis that the data comes from a normal distribution is rejected. 
+
+```{r}
+transform_and_test(removed$energy_joules, intact$energy_joules)
+```
+```{r}
+pdf(file="/home/omar/thesis-replication-package/resource_hints/data_analysis/plots/qqplot_hints_energy.pdf")
+differences <- removed$energy_joules - intact$energy_joules
+qqnorm(differences, main="", xlab = "Normal theoretical quantile", ylab="Energy consumption differences sample quantile (J)")
+qqline(differences)
+#transform_and_test(removed$energy_joules, intact$energy_joules)
+dev.off()
+```
+Since the differences are not normally distributed we apply several transformations to see if we can approach a normal distribution. As the distribution is skewed to the left we mirror it first before applying the transformations.
+
+```{r}
+transform_and_test(removed$energy_joules, intact$energy_joules, "log", reverse=TRUE)
+transform_and_test(removed$energy_joules, intact$energy_joules, "sqrt", reverse=TRUE)
+transform_and_test(removed$energy_joules, intact$energy_joules, "recip", reverse=TRUE)
+```
+
+We can see that for all three transformations the data is not normally distributed.
+
+# Hypothesis Testing
+Since the data is not normally distributed we  will use the Wilcoxon signed rank test:
+```{r}
+wilcox.test(removed$energy_joules, intact$energy_joules, paired=TRUE)
+```
+As we can see this tests gives a p-value of 6.216e-06. This is smaller than our alpha of 0.05. This we can see a significant difference in energy consumption between webpages using hints versus not using them.
+
+# Effect Size Estimation
+```{r}
+cliffs_delta_energy <- cliff.delta(removed$energy_joules, intact$energy_joules)
+print(cliffs_delta_energy)
+```
+We have a native cliffs delta indicating that the eneryg consumption when hints are used is larger. However it is with a negligible effect size.
+
+
+
+

@@ -1,0 +1,125 @@
+URL,Sends POST Request,Removes preloads,Nr preloads scraped,Nr preloads detected proxy,Works after removal,Included,Notes
+acientistaagricola.pt,Yes,Yes,15,15,"No, CSS is broken",No,CSS is broken
+cruisetricks.de	,NA,NA,NA,NA,NA,No,Breaks mitmproxy because of encoding/decoding
+elbotola.com,NA,NA,0,17,NA,No,Has no preloads...
+zksync.io,,,,34,,No,Does not work with our /noremovepreloads. Gives 404 error
+alternativeto.net,NA,NA,3,17,NA,No,Has almost no preloads
+nzz.ch	,No,NA,NA,NA,NA,No,Send POST request multiple times.
+espncricinfo.com,No,,,,,No,Does not send POST Request
+theweathernetwork.com,NA,NA,0,21,NA,No,Has no preloads...
+el-fenn.com,,,37,7,,No,Huge difference in preloads
+mercan.com	,,,,,,No,Redirects after a long time to itself. Unable to get proper PLT.
+coursera.org,,,28,28,No,No,CSS breaks
+an.com.br,Yes,Yes,24,24,Yes,No, an.com.br redirects to xxx. Also onload is fired after 1.15 minutes. On device 1.8 minutes
+insydo.com,Yes,Yes,16,16,Yes,No,Takes 1.22 minutes before onload on laptop. On Mobile devices onload is never fired.
+parsely.com,Yes,Yes,31,28,,Probably,Redirects from parsely.com to parse.ly. We can change this in the proxy plugin tho. Nr of preloads scraped differs from detected by proxy.
+grantthornton.se,Yes,Yes,18,19,Yes,Probably,CSS is not loaded because <link></link> is used. Everything inbetween these  tags is deleted which included the css. Too much effort to fix this. When switching to lxml as parser it worked
+haaretz.com,Yes,Yes,20,22,Yes,No,Takes too long
+veronicatv.nl,Yes,Yes,25,26,Yes,Probably,Redirects to kijk.nl
+sedanmed.ir,Yes,Yes,14,16,Yes,Probably,
+newsbreak.com,Yes,Yes,40,45,Yes,Probably,
+coindesk.com,Yes,Yes,26,25,,Probably,
+bensonbingham.com,Yes,Yes,18,18,Yes,Yes,
+squareinternet.co        ,Yes,Yes,21,21,Yes,Yes,
+unilad.co.uk,Yes,Yes,57,57,Yes,Yes,
+africafreak.com,Yes,Yes,17,17,Yes,Yes,
+traineracademy.org,Yes,Yes,19,19,Yes,Yes,
+lisakristine.com,Yes,Yes,76,76,Yes,Yes,
+home.pl,Yes,Yes,20,20,Yes,Yes,
+screenrant.com,Yes,Yes,20,20,Yes,Yes,
+nbc.com,Yes,Yes,14,14,Yes,Yes,
+agriwebb.com,Yes,Yes,22,22,Yes,Yes,
+musicgreatness.com,Yes,Yes,27,27,Yes,Yes,
+cbc.ca,Yes,Yes,24,24,Yes,Yes,Has 1.20 minute load time
+fastcodesign.com,Yes,Yes,16,16,Yes,Yes,Redirects to fastcompany.. Takes 1.30 minutes to load. On Mobile device it takes: 1.9 minutes.
+trustpilot.com,Yes,Yes,14,14,Yes,Yes,
+theodysseyonline.com,Yes,Yes,16,16,Yes,Yes,
+dji.com        ,Yes,Yes,47,55,Yes,Yes,
+animoto.com        ,Yes,Yes,20,20,Yes,Yes,
+blistex.com        ,Yes,Yes,17,17,Yes,Yes,
+fitchratings.ru        ,Yes,Yes,23,39,Yes,Yes,Redirects from fitchratings.ru	fitchratings.com/ru
+berlinomagazine.com        ,Yes,Yes,34,34,,Yes,
+,,,,,,,
+,,,,,,,
+New 11 subjects,,,,,,,
+elastic.co,,,36,36,,No,Parse errors
+changeinseconds.com,NA,NA,18,4,NA,No,Difference in preloads
+beegru.com,Yes,Yes,16,16,Yes,Yes,
+scmp.com,Yes,Yes,17,17,Yes,Yes,"Takes very long, 1.2 minutes to load"
+insertlive.com,Sends multiple,,16,14,,No,Sends multiple POST requests
+jisr.net,Yes,Yes,14,15,yes,Yes,
+g-talent.net,Yes,Yes,18,18,yes,yes,
+noshift.com,Yes,Yes,20,20,Yes,yes,
+ict.moscow,Yes,Yes,52,52,Yes,Yes,
+bmj.com,NA,NA,18,7,,No,Huge difference in preloads found.
+schmoozecom.com,Yes,Yes,38,36,Yes,Yes,Redirects to sangoma.com
+,,,,,,,
+Last round,,,,,,,
+affirm.com,Yes,Yes,20,20,Yes,Yes,
+ladbible.com,Yes,Yes,57,57,Yes,Yes,
+infobunny.com,Yes,Yes,24,27,Yes,Yes,
+intercom.io,Yes,Yes,27,27,Yes,yes,Redirects to intercom.com
+,,,,,,,
+beegru.com,,,,,,,
+scmp.com,,,,,,,
+schmoozecom.com,,,,,,,
+jisr.net,,,,,,,
+g-talent.net,,,,,,,
+noshift.com,,,,,,,
+ict.moscow,,,,,,,
+,,,,,,,
+ingenieriareal.com,Yes,Yes,36,37,Yes,Yes,
+sportbible.com,Yes,Yes,57,57,Yes,Yes,
+unclesamsmisguidedchildren.com,Yes,Yes,19,19,Yes,Yes,
+,,,,,,,
+veronicatv.nl,,,,,,,
+sedanmed.ir,,,,,,,
+newsbreak.com,,,,,,,
+coindesk.com,,,,,,,
+parsely.com,,,,,,,
+grantthornton.se,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+Final List,,,,,,,
+affirm.com,,,,,,,
+ladbible.com,,,,,,,
+infobunny.com,,,,,,,
+intercom.io,,,,,,,
+beegru.com,,,,,,,
+scmp.com,,,,,,,
+schmoozecom.com,,,,,,,
+jisr.net,,,,,,,
+g-talent.net,,,,,,,
+noshift.com,,,,,,,
+ict.moscow,,,,,,,
+ingenieriareal.com,,,,,,,
+sportbible.com,,,,,,,
+unclesamsmisguidedchildren.com,,,,,,,
+veronicatv.nl,,,,,,,
+sedanmed.ir,,,,,,,
+newsbreak.com,,,,,,,
+coindesk.com,,,,,,,
+parsely.com,,,,,,,
+grantthornton.se,,,,,,,
+bensonbingham.com,,,,,,,
+squareinternet.co        ,,,,,,,
+unilad.co.uk,,,,,,,
+africafreak.com,,,,,,,
+traineracademy.org,,,,,,,
+lisakristine.com,,,,,,,
+home.pl,,,,,,,
+screenrant.com,,,,,,,
+nbc.com,,,,,,,
+agriwebb.com,,,,,,,
+musicgreatness.com,,,,,,,
+cbc.ca,,,,,,,
+fastcodesign.com,,,,,,,
+trustpilot.com,,,,,,,
+theodysseyonline.com,,,,,,,
+dji.com        ,,,,,,,
+animoto.com        ,,,,,,,
+blistex.com        ,,,,,,,
+fitchratings.ru        ,,,,,,,
+berlinomagazine.com        ,,,,,,,
